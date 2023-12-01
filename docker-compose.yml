@@ -6,7 +6,7 @@ services:
     ports:
       - 3306:3306
     environment:
-      MYSQL_DATABASE: ‘test-crud’
+      MYSQL_DATABASE: api_rest_crud
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql

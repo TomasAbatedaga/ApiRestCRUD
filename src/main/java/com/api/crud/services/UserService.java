@@ -1,5 +1,6 @@
 package com.api.crud.services;
 
+import com.api.crud.api.UserRequestDTO;
 import com.api.crud.models.UserModel;
 import com.api.crud.repositories.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,12 @@ public class UserService {
         return (ArrayList<UserModel>) userRepository.findAll();
     }
 
-    public UserModel saveUser(UserModel user) {
-        return userRepository.save(user);
+    public UserModel saveUser(UserRequestDTO request) {
+        var userModel = new UserModel();
+        userModel.setNombre(request.nombre());
+        userModel.setApellido(request.apellido());
+        userModel.setEmail(request.email());
+        return userRepository.save(userModel);
     }
 
     public Optional<UserModel> getById(int id) {
@@ -26,37 +31,32 @@ public class UserService {
     }
 
 
-    public Optional<UserModel> updateById(UserModel request, int id){
+    public Optional<UserModel> updateById(UserRequestDTO request, int id) {
         Optional<UserModel> user = userRepository.findById(id);
 
-        if (user.isPresent()){
-            UserModel userModel = user.get();
-            userModel.setNombre(request.getNombre());
-            userModel.setApellido(request.getApellido());
-            userModel.setEmail(request.getEmail());
-
-            userRepository.save(userModel);
-            return Optional.of(userModel);
+        if (user.isPresent()) {
+            if (request.nombre() != null) {
+                user.get().setNombre(request.nombre());
+            }
+            if (request.apellido() != null) {
+                user.get().setApellido(request.apellido());
+            }
+            if (request.email() != null) {
+                user.get().setEmail(request.email());
+            }
+            return Optional.of(userRepository.save(user.get()));
         } else {
             return Optional.empty();
         }
     }
-    /*public UserModel updateById(UserModel request, int id){
-        UserModel user = userRepository.findById(id).get();
 
-        user.setNombre(request.getNombre());
-        user.setApellido(request.getApellido());
-        user.setEmail(request.getEmail());
-
-        return user;
-    }*/
-
-    public Boolean deleteUser(int id){
-        try{
-            userRepository.deleteById(id);
-            return true;
-        } catch (Exception e){
-            return false;
+        public Boolean deleteUser (int id){
+            try {
+                userRepository.deleteById(id);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
         }
     }
-}
+

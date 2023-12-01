@@ -1,3 +1,12 @@
-CREATE DATABASE test-crud;
-USE main;
-CREATE TABLE users ;
+CREATE DATABASE main;
+USE api_rest_crud;
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users`
+(
+`id` INT(11) NOT NULL AUTO_INCREMENT,
+`nombre` VARCHAR(255) NOT NULL,
+`apellido` VARCHAR(255) NOT NULL,
+`email` VARCHAR(255) NOT NULL,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
